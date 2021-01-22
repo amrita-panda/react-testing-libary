@@ -43,8 +43,8 @@ describe('api calls',()=>{
         data().then(response=>{
             expect(response).toEqual({data:[{name:'mock',email:'mcok@digitaldots.ai'}]})
         })
+        expect(data).toHaveBeenCalled();
         render(<Form />)
-        
     })
     
     test('with jestSpyon ',()=>{
@@ -55,7 +55,6 @@ describe('api calls',()=>{
                     {"name":'getSpy2',email:'getSpy2@gmail.com'}
                 ]
             })
-            
         })
         
         data().then(response=>{
@@ -66,6 +65,7 @@ describe('api calls',()=>{
                 ]
             })
         })
+        expect(data).toHaveBeenCalled();
     render(<Form />)
     jest.clearAllMocks()
     })
@@ -75,42 +75,41 @@ describe('api calls',()=>{
     
 
 
-describe('form input fields present',()=>{
+ describe('form input fields present',()=>{
 
     test('fullname is inputbox present',()=>{
         render(<Form />)
         const fullName=screen.getByText('FullName:',{exact:false})
         expect(fullName.textContent).toBe('FullName:')
         expect(fullName.tagName.toLowerCase()).toBe('label')
-     
-    })
+     })
+
     test('email input box present',()=>{
         render(<Form />)
         const email=screen.getByText('Ema',{exact:false})
         expect(email.textContent).toBe('Email')
         expect(email.tagName.toLowerCase()).toBe('label')
-     
     })
+
     test('textarea present',()=>{
         render(<Form />)
         const comment=screen.getByText('Comment',{exact:false})
         expect(comment.textContent).toBe('Comment:')
         expect(comment.tagName.toLowerCase()).toBe('label')
-     
-    })
+     })
+
     test('select list present',()=>{
         render(<Form />)
         const selectList=screen.getByText('Select',{exact:false})
         expect(selectList.textContent).toBe('Select list:')
         expect(selectList.tagName.toLowerCase()).toBe('label')
-     
-    })
+     })
+
     test('radio is present',()=>{
         render(<Form />)
         const radio=screen.getByText('Option',{exact:false})
         expect(radio.textContent).toBe('Option 2')
         expect(radio.tagName.toLowerCase()).toBe('label')
-     
     })
 
     test('form submit button is present',()=>{
@@ -126,6 +125,7 @@ describe('form input fields present',()=>{
 })
 
 describe('onchange to all input fields',()=>{
+
     test('fullname onchange event triggered',()=>{
         render(<Form />)
         let fullnameInput =document.querySelector('input[name="fullname"]')
@@ -153,12 +153,14 @@ describe('onchange to all input fields',()=>{
         fireEvent.change(commentInput,{target:{value:'it was a good experiance'}})
         expect(commentInput.value).toEqual('it was a good experiance')
     })
+
     test('select onchange event triggered',()=>{
         render(<Form />)
         let selectInput=document.querySelector('select[name="list"]')
         fireEvent.change(selectInput,{target:{value:'1'}})
         expect(selectInput.value).toEqual('1')
     })
+    
     test('radio onchange event triggered',()=>{
         render(<Form />)
         let radioInput=document.querySelector('input[name="radio"]')
