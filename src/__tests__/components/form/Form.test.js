@@ -39,12 +39,16 @@ beforeEach(()=>{
 describe('api calls',()=>{
 
     test('mock getUser api call',()=>{
-        formService.getUsers.mockResolvedValueOnce({data:[{name:'mock',email:'mcok@digitaldots.ai'}]})
+      let data =  formService.getUsers.mockResolvedValueOnce({data:[{name:'mock',email:'mcok@digitaldots.ai'}]})
+        data().then(response=>{
+            expect(response).toEqual({data:[{name:'mock',email:'mcok@digitaldots.ai'}]})
+        })
         render(<Form />)
+        
     })
     
     test('with jestSpyon ',()=>{
-          jest.spyOn(formService,'getUsers').mockImplementation(()=>{
+       let data=   jest.spyOn(formService,'getUsers').mockImplementation(()=>{
             return Promise.resolve({
                 data:[
                     {"name":'getSpy1',email:'getSpy1@gmail.com'},
@@ -53,11 +57,22 @@ describe('api calls',()=>{
             })
             
         })
-
-    })
+        
+        data().then(response=>{
+            expect(response).toEqual({
+                data:[
+                    {"name":'getSpy1',email:'getSpy1@gmail.com'},
+                    {"name":'getSpy2',email:'getSpy2@gmail.com'}
+                ]
+            })
+        })
     render(<Form />)
     jest.clearAllMocks()
-})
+    })
+ })
+
+ 
+    
 
 
 describe('form input fields present',()=>{
@@ -114,7 +129,6 @@ describe('onchange to all input fields',()=>{
     test('fullname onchange event triggered',()=>{
         render(<Form />)
         let fullnameInput =document.querySelector('input[name="fullname"]')
-        console.log(fullnameInput.values);
         fireEvent.change(fullnameInput, { target: { value: 'amrita panda' } })
         expect(fullnameInput.value).toEqual('amrita panda')
     })
@@ -122,7 +136,6 @@ describe('onchange to all input fields',()=>{
     test('email onchange event triggered',()=>{
         render(<Form />)
         let emailInput =document.querySelector('input[name="email"]')
-        console.log(emailInput.values);
         fireEvent.change(emailInput, { target: { value: 'amritapanda@digitaldots.ai' } })
         expect(emailInput.value).toEqual('amritapanda@digitaldots.ai')
     })
@@ -130,9 +143,30 @@ describe('onchange to all input fields',()=>{
     test('email onchange event triggered',()=>{
         render(<Form />)
         let emailInput =document.querySelector('input[name="email"]')
-        console.log(emailInput.values);
         fireEvent.change(emailInput, { target: { value: 'amritapanda@digitaldots.ai' } })
         expect(emailInput.value).toEqual('amritapanda@digitaldots.ai')
     })
+
+    test('comment onchange event triggered',()=>{
+        render(<Form />)
+        let commentInput =document.querySelector('textarea[name="review"]');
+        fireEvent.change(commentInput,{target:{value:'it was a good experiance'}})
+        expect(commentInput.value).toEqual('it was a good experiance')
+    })
+    test('select onchange event triggered',()=>{
+        render(<Form />)
+        let selectInput=document.querySelector('select[name="list"]')
+        fireEvent.change(selectInput,{target:{value:'1'}})
+        expect(selectInput.value).toEqual('1')
+    })
+    test('radio onchange event triggered',()=>{
+        render(<Form />)
+        let radioInput=document.querySelector('input[name="radio"]')
+        fireEvent.change(radioInput,{target:{value:true}})
+        expect(radioInput.value).toEqual("true")
+    })
 })
 
+describe('onclick of submit button make a post api',()=>{
+  
+})
